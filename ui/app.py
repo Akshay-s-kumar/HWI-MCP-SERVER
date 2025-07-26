@@ -57,6 +57,7 @@ async def process_user_query():
         print(f"Received query from Streamlit: '{user_query}'")
         llm_response = await mcp_instance.process_query(user_query)
         print(f"Response from client_llm: {llm_response}")
+        print(mcp_instance.complete_logs)
         return jsonify(llm_response), 200
     except Exception as e:
         print(f"Error processing query: {e}")

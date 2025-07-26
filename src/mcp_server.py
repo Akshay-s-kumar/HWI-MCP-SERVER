@@ -504,7 +504,6 @@ def list_directory(dir_path: str = ".", include_hidden: bool = False, sort_by: s
                 })
             except (OSError, PermissionError):
                 continue
-        
         # Sort items
         sort_keys = {
             "name": lambda x: x["name"].lower(),

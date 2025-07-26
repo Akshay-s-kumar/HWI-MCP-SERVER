@@ -30,6 +30,7 @@ class MCPClient:
         self.exit_stack = AsyncExitStack()
         self.available_tools = []
         self.conversation_history = []
+        self.complete_logs = []
 
     async def connect_to_server(self, server_script_path: str):
         """Connect to the MCP server script (.py) via stdio."""
@@ -183,7 +184,7 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
                             continue
                         
                         print(f"🔧 Executing: {tool_name}({tool_args})")
-                        
+                        self.complete_logs.append(tool.name)
                         try:
                             # Execute tool
                             result = await self.session.call_tool(tool_name, tool_args)
