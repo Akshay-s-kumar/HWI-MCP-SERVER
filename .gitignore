@@ -1,0 +1,166 @@
+
+# Ignore Python virtual environment
+venv/
+my-env/
+.env
+
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# VS Code workspace settings (optional)
+.vscode/
+
+# PyInstaller build outputs
+dist/
+build/
+*.spec
+
+
+# Jupyter Notebooks (if any)
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Unit test cache
+.pytest_cache/
+
+# Environment and secrets
+.env
+.env.*
+
+# Ignore large temp files
+*.bak
+*.tmp
+# MCP File System Assistant .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+!mcp_filesystem.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env.local
+.env.development
+.env.production
+
+# Streamlit
+.streamlit/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Project specific
+config/.env
+config/logs/
+*.db
+*.sqlite
+*.sqlite3
+file_index.db
+temp/
+tmp/
+logs/
+*.log
+
+# Build artifacts
+release/
+releases/
+packages/
+artifacts/
+
+# MCP specific
+mcp_server_logs/
+client_logs/
+.mcp_cache/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Large files that shouldn't be in repo
+*.exe
+*.dmg
+*.pkg
+*.deb
+*.rpm
+*.zip
+*.tar.gz
+*.tar.bz2
+*.7z
+
+# Development
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
