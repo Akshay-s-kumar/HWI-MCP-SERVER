@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File System Chatbot</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #chat-container {
+            width: 90%;
+            max-width: 700px;
+            height: 90vh;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #chat-header {
+            background-color: #4A90E2;
+            color: white;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+        }
+        #chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+        }
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .user-message {
+            align-self: flex-end;
+            background-color: #4A90E2;
+            color: white;
+            border-radius: 18px 18px 5px 18px;
+            padding: 10px 15px;
+            max-width: 70%;
+        }
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e5e5ea;
+            color: black;
+            border-radius: 18px 18px 18px 5px;
+            padding: 10px 15px;
+            max-width: 80%;
+        }
+        .bot-message code {
+            background-color: #dcdcdc;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: "Courier New", Courier, monospace;
+        }
+        #input-form {
+            display: flex;
+            padding: 15px;
+        }
+        #user-input {
+            flex-grow: 1;
+            border: 1px solid #ccc;
+            border-radius: 18px;
+            padding: 10px 15px;
+            font-size: 1em;
+            outline: none;
+        }
+        #user-input:focus {
+            border-color: #4A90E2;
+        }
+        #send-button {
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            margin-left: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #send-button:hover {
+            background-color: #357ABD;
+        }
+        .typing-indicator {
+            font-style: italic;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-header">File System Chatbot 🤖</div>
+        <div id="chat-box">
+             <div class="message">
+                <div class="bot-message">Hello! How can I help you with your files today? Try something like "find my_report.docx" or "create a file on my desktop named todo.txt with content: Buy milk".</div>
+            </div>
+        </div>
+        <form id="input-form">
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
+            <button id="send-button" type="submit">→</button>
+        </form>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const inputForm = document.getElementById('input-form');
+        const userInput = document.getElementById('user-input');
+
+        inputForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageText = userInput.value.trim();
+            if (!messageText) return;
+
+            // Display user message
+            addMessage(messageText, 'user-message');
+            userInput.value = '';
+
+            // Show typing indicator
+            const typingIndicator = addMessage('...', 'bot-message typing-indicator');
+
+            // Send to backend
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: messageText }),
+                });
+
+                const data = await response.json();
+                
+                // Remove typing indicator and show bot response
+                chatBox.removeChild(typingIndicator);
+                addMessage(data.response, 'bot-message');
+
+            } catch (error) {
+                chatBox.removeChild(typingIndicator);
+                addMessage('Sorry, something went wrong. Check the server console.', 'bot-message');
+                console.error('Error:', error);
+            }
+        });
+
+        function addMessage(text, className) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message';
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = className;
+            contentDiv.innerHTML = text; // Use innerHTML to render bold, br, etc.
+            
+            messageDiv.appendChild(contentDiv);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
+            return messageDiv;
+        }
+    </script>
+</body>
+</html>
