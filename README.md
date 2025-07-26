@@ -1,34 +1,34 @@
-# 🤖 MCP File System Assistant
+#  MCP File System Assistant
 
 A powerful natural language interface for file system operations using the Model Context Protocol (MCP). Talk to your computer's file system using plain English and let AI handle the complex operations for you.
 
-## ✨ Features
+##  Features
 
-### 🔍 **Intelligent File Search**
+###  **Intelligent File Search**
 - **Lightning-fast indexed search** across your entire file system
 - **Smart pattern matching** - find files by partial names, content, or patterns  
 - **Natural language queries** - "find my latest resume" or "show Python files from last week"
 - **Alias support** - use shortcuts like "desktop", "downloads", "documents"
 
-### 📁 **Complete File Operations**
+###  **Complete File Operations**
 - **Read any text file** - supports 15+ file formats including code, configs, and documents
 - **Create files with templates** - Python scripts, HTML pages, Markdown docs, and more
 - **Smart editing** - write, append, or modify file contents
 - **Safe operations** - confirmation prompts and rollback protection
 
-### 🧠 **AI-Powered Intelligence**
+###  **AI-Powered Intelligence**
 - **Contextual understanding** - knows what you mean even with ambiguous requests
 - **Multi-step operations** - "find my old project files and move them to archive"
 - **Error recovery** - suggests fixes when operations fail
 - **Learning conversation** - remembers context within your session
 
-### 🛡️ **Enterprise-Grade Safety**
+###  **Enterprise-Grade Safety**
 - **Protected directories** - prevents accidental system file deletion
 - **Confirmation dialogs** - double-checks destructive operations
 - **Detailed logging** - full audit trail of all operations
 - **Graceful error handling** - never crashes, always recovers
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### Option 1: Download Pre-Built Executable (Recommended)
 
@@ -61,7 +61,7 @@ pip install -r requirements.txt
 python main_launcher.py
 ```
 
-## 💬 Usage Examples
+##  Usage Examples
 
 ### Basic File Operations
 ```
@@ -94,7 +94,7 @@ Assistant: Found 3 resume files:
            3. old_resume.pdf (Dec 2023)
            
            Moving the latest version (resume_2024_final.pdf) to desktop...
-           ✅ Successfully moved to C:\Users\You\Desktop\resume_2024_final.pdf
+            Successfully moved to C:\Users\You\Desktop\resume_2024_final.pdf
 
 You: "Show me all large files over 100MB in my downloads, sorted by size"
 Assistant: Found 7 files over 100MB in downloads:
@@ -108,14 +108,14 @@ Assistant: Found 7 files over 100MB in downloads:
 ```
 You: "Delete all .tmp files older than a week"
 Assistant: Found 45 .tmp files older than 7 days.
-           ⚠️  This will permanently delete 45 files (total: 2.3 GB)
+           This will permanently delete 45 files (total: 2.3 GB)
            
            Continue? (y/n): y
            
-           ✅ Deleted 45 temporary files, freed 2.3 GB of space
+           Deleted 45 temporary files, freed 2.3 GB of space
 ```
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐    Natural Language    ┌─────────────────┐
@@ -140,7 +140,7 @@ The system uses the **Model Context Protocol (MCP)** to create a secure bridge b
 - **AI Client**: Interprets natural language and orchestrates operations  
 - **User Interface**: Clean terminal-based interaction
 
-## 🛠️ Available Tools
+##  Available Tools
 
 | Tool | Description | Example Usage |
 |------|-------------|---------------|
@@ -156,7 +156,7 @@ The system uses the **Model Context Protocol (MCP)** to create a secure bridge b
 | `list_directory` | Show folder contents | "List files in documents" |
 | `initialize_index` | Setup fast file indexing | "Index my directories" |
 
-## ⚙️ Configuration
+##  Configuration
 
 The application uses a `.env` file for configuration. Key settings:
 
@@ -181,7 +181,7 @@ AUTO_INDEX_ON_STARTUP=true
 INDEX_DB_PATH=file_index.db
 ```
 
-## 🏭 For Developers
+##  For Developers
 
 ### Development Setup
 
@@ -214,7 +214,7 @@ def my_custom_tool(param1: str, param2: int = 10):
 2. **Update the client's system prompt** to include the new tool
 3. **Test with natural language**: "Use my custom tool with these parameters"
 
-## 📈 Performance
+##  Performance
 
 ### Benchmarks
 - **File search**: < 1 second for 100K+ indexed files
@@ -228,7 +228,7 @@ def my_custom_tool(param1: str, param2: int = 10):
 3. **Use specific queries** - "Python files in projects" vs "find files"
 4. **Regular cleanup** - Remove old index files and logs periodically
 
-## 🔒 Security & Privacy
+##  Security & Privacy
 
 ### Data Protection
 - **Local processing**: All file operations happen on your machine
@@ -250,7 +250,7 @@ def my_custom_tool(param1: str, param2: int = 10):
 ## Log Files
 Check `logs/mcp_assistant.log` for detailed error information.
 
-## 📋 System Requirements
+##  System Requirements
 
 ### Minimum Requirements
 - **OS**: Windows 10, macOS 10.14, or Linux (Ubuntu 18.04+)
@@ -274,7 +274,7 @@ Check `logs/mcp_assistant.log` for detailed error information.
 **Metadata Support:**
 - All file types (size, dates, permissions)
 
-## 📜 License
+##  License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
@@ -302,33 +302,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **[Model Context Protocol](https://modelcontextprotocol.io/)** - The foundation that makes this possible
 - **[Groq](https://groq.com/)** - Lightning-fast AI inference
 - **[PyInstaller](https://pyinstaller.org/)** - Python to executable conversion
 - **[GitHub Actions](https://github.com/features/actions)** - Automated CI/CD pipeline
-
-## 📞 Support
-
-- **📖 Documentation**: [GitHub Wiki](https://github.com/yourusername/mcp-filesystem-assistant/wiki)
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/yourusername/mcp-filesystem-assistant/issues)
-- **💡 Feature Requests**: [GitHub Discussions](https://github.com/yourusername/mcp-filesystem-assistant/discussions)
-- **💬 Community**: [Discord Server](https://discord.gg/mcp-filesystem)
-
-## ⭐ Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=yourusername/mcp-filesystem-assistant&type=Date)](https://star-history.com/#yourusername/mcp-filesystem-assistant&Date)
-
----
-
-<div align="center">
-
-**[⬆ Back to Top](#-mcp-file-system-assistant)**
-
-Made with ❤️ by the MCP File System Assistant team
-
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/mcp-filesystem-assistant?style=social)](https://github.com/yourusername/mcp-filesystem-assistant/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/mcp-filesystem-assistant?style=social)](https://github.com/yourusername/mcp-filesystem-assistant/network/members)
-
-</div>
