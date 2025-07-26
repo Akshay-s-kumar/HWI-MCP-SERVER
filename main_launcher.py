@@ -1,8 +1,8 @@
-# main_launcher.py
 import subprocess
 
-# Start Flask backend (in background)
-subprocess.Popen(["dist/app.exe"])
+# Start only the Flask backend (app.py is compiled to app.exe)
+subprocess.Popen(["app.exe"])
 
-# Start Streamlit UI
-subprocess.call(["streamlit", "run", "ui/streamlit_app.py"])
+print("MCP Backend started successfully.")
+print("Now open a new terminal and run:")
+print("streamlit run streamlit_app.py")

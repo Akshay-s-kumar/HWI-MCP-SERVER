@@ -33,8 +33,8 @@ A powerful natural language interface for file system operations using the Model
 ### Option 1: Download Pre-Built Executable (Recommended)
 
 1. **Download the latest release:**
-   - Go to [Releases](https://github.com/yourusername/mcp-filesystem-assistant/releases)
-   - Download `MCP-FileSystem-Assistant-Windows.zip`
+   - Go to [Releases](https://github.com/Akshay-s-kumar/HWI-MCP-SERVER/releases)
+   - Download `main_launcher.zip`
    - Extract to any folder
 
 2. **Get your free API key:**
@@ -50,15 +50,15 @@ A powerful natural language interface for file system operations using the Model
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/mcp-filesystem-assistant.git
+git clone https://github.com/Akshay-s-kumar/HWI-MCP-SERVER.git
 cd mcp-filesystem-assistant
 
-# Run setup (installs dependencies and creates config)
-python setup.py
+# installs dependencies and creates config
+pip install -r requirements.txt
 
 # Edit config/.env with your API key
 # Then run the application
-python launcher.py
+python main_launcher.py
 ```
 
 ## 💬 Usage Examples
@@ -198,23 +198,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 pip install -r requirements-dev.txt
 
-# Run tests
-pytest tests/
 
-# Run with development settings
-python launcher.py --debug
-```
-
-### Building Executables Locally
-
-```bash
-# Build for current platform
-python build.py
-
-# This creates:
-# - dist/MCP-FileSystem-Assistant.exe (or platform equivalent)
-# - MCP-FileSystem-Assistant-Windows.zip (portable package)
-```
 
 ### Adding New Tools
 
@@ -229,69 +213,6 @@ def my_custom_tool(param1: str, param2: int = 10):
 
 2. **Update the client's system prompt** to include the new tool
 3. **Test with natural language**: "Use my custom tool with these parameters"
-
-### Project Structure
-
-```
-mcp-filesystem-assistant/
-├── 📄 server.py              # MCP server with file system tools
-├── 📄 client.py              # AI-powered client application  
-├── 📄 launcher.py            # Main executable entry point
-├── 📄 setup.py               # Automated setup script
-├── 📄 build.py               # Local build script
-├── 🗂️ .github/workflows/     # GitHub Actions CI/CD
-├── 🗂️ config/               # Configuration templates
-├── 🗂️ examples/             # Usage examples and batch files
-├── 🗂️ tests/                # Unit and integration tests
-├── 🗂️ docs/                 # Documentation and guides
-└── 📄 requirements.txt       # Python dependencies
-```
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how to get started:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
-3. **Make your changes** and add tests
-4. **Run the test suite**: `pytest`
-5. **Submit a pull request**
-
-### Areas We Need Help With
-
-- 🌐 **Web interface** - Build a modern web UI
-- 🐧 **Linux/macOS testing** - Ensure cross-platform compatibility
-- 📚 **Documentation** - Improve guides and examples
-- 🔌 **Integrations** - Cloud storage, version control, etc.
-- 🧪 **Testing** - Expand test coverage
-- 🔒 **Security** - Code audits and security enhancements
-
-## 📊 GitHub Actions CI/CD
-
-This project uses GitHub Actions for automated building and releasing:
-
-### Automated Builds
-- **Triggers**: Push to main, tags, pull requests
-- **Platforms**: Windows, Linux, macOS
-- **Outputs**: Native executables for each platform
-- **Artifacts**: Portable packages ready for distribution
-
-### Release Process
-1. Create a new tag: `git tag v1.0.0 && git push origin v1.0.0`
-2. GitHub Actions automatically:
-   - Builds executables for all platforms
-   - Runs tests and quality checks
-   - Creates portable packages
-   - Publishes a new GitHub release
-3. Users can immediately download the latest version
-
-### Build Configuration
-The workflow is defined in `.github/workflows/build-and-release.yml` and includes:
-- Dependency caching for faster builds
-- Multi-platform compilation
-- Automated testing
-- Security scanning
-- Release automation
 
 ## 📈 Performance
 
@@ -326,48 +247,7 @@ The workflow is defined in `.github/workflows/build-and-release.yml` and include
 - **Offline capability**: File operations work without internet
 - **Minimal data usage**: Only text queries sent to API (< 1KB per request)
 
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**"GROQ_API_KEY not found"**
-```bash
-# Solution: Check your config file
-cat config/.env
-# Make sure it contains: GROQ_API_KEY=your_actual_key_here
-```
-
-**"Server connection failed"**
-```bash
-# Solution: Restart the application
-# If using separate server/client:
-python server.py  # Terminal 1
-python client.py server.py  # Terminal 2
-```
-
-**"Permission denied" errors**
-```bash
-# Solution: Check file permissions
-# Run as administrator if needed (Windows)
-# Use sudo if needed (Linux/macOS) - not recommended for regular use
-```
-
-**Slow search performance**
-```bash
-# Solution: Initialize file index
-# In the application, type: "initialize index for desktop and downloads"
-```
-
-### Debug Mode
-```bash
-# Run with debug output
-python launcher.py --debug
-
-# Or set in config/.env
-DEBUG_MODE=true
-```
-
-### Log Files
+## Log Files
 Check `logs/mcp_assistant.log` for detailed error information.
 
 ## 📋 System Requirements
@@ -393,26 +273,6 @@ Check `logs/mcp_assistant.log` for detailed error information.
 
 **Metadata Support:**
 - All file types (size, dates, permissions)
-
-## 🗺️ Roadmap
-
-### Version 1.1 (Next Release)
-- [ ] **Web Interface** - Browser-based GUI
-- [ ] **Cloud Integration** - Google Drive, Dropbox, OneDrive
-- [ ] **Advanced Search** - Content search, file similarity
-- [ ] **Batch Operations** - Process multiple files at once
-
-### Version 1.2 (Future)
-- [ ] **Plugin System** - Custom tool development
-- [ ] **Team Features** - Shared configurations and scripts
-- [ ] **API Access** - REST API for integration
-- [ ] **Mobile App** - iOS and Android companion
-
-### Version 2.0 (Long-term)
-- [ ] **Local AI Models** - Run without internet
-- [ ] **Visual Interface** - GUI application
-- [ ] **Advanced Analytics** - File usage patterns and insights
-- [ ] **Enterprise Features** - SSO, audit logs, compliance
 
 ## 📜 License
 

@@ -5,6 +5,16 @@ import json
 import os
 import sys
 
+# Disable Streamlit auto-reload when running from .exe
+if getattr(sys, 'frozen', False):
+    os.environ["STREAMLIT_SERVER_HEADLESS"] = "true"
+    os.environ["STREAMLIT_SERVER_RUN_ON_SAVE"] = "false"
+    os.environ["STREAMLIT_SERVER_ENABLE_WATCHDOG"] = "false"
+    os.environ["STREAMLIT_SERVER_ENABLE_CORS"] = "false"
+    os.environ["STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION"] = "false"
+    os.environ["STREAMLIT_BROWSER_GATHER_USAGE_STATS"] = "false"
+    os.environ["STREAMLIT_SERVER_FILE_WATCHER_TYPE"] = "none"
+    
 
 # Configuration for your Flask API
 FLASK_API_URL = "http://127.0.0.1:5000/process_query"
@@ -44,9 +54,6 @@ if st.button("Execute Command"):
 
                         st.success("Command Executed Successfully!")
                         st.write("---")
-                        #st.subheader("Agent Response:")
-                        # This line is where the error was, if response_data wasn't a dict
-                        #st.info(response_data.get("response", "No 'response' key found in JSON."))
                     except json.JSONDecodeError:
                         st.error("API returned a non-JSON response despite 200 status. See raw content above.")
                         st.info("This might happen if Flask returns a plain string or HTML on success.")
