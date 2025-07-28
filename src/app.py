@@ -3,8 +3,10 @@ import asyncio
 from flask import Flask, request, jsonify, render_template
 import sys 
 import asyncio
-from src.main import FileChatbot
-
+from client_llm import MCPClient
+import traceback
+import nest_asyncio
+nest_asyncio.apply()
 # Add this helper function below the imports
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -18,14 +20,9 @@ def resource_path(relative_path):
 # --- Initialization ---
 app = Flask(__name__, template_folder=resource_path('ui')) 
 
-# Load the API Key
-api_key = os.getenv("GROQ_API_KEY")
-if not api_key:
-    raise ValueError("GROQ_API_KEY not found. Please ensure it is in your config/.env file.")
-
 # Create a single, shared instance of the chatbot
 # This is important for performance and for state management (like delete confirmations)
-chatbot_instance = FileChatbot(groq_api_key=api_key)
+chatbot_instance = MCPClient()
 
 # --- Routes ---
 
@@ -35,7 +32,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/chat', methods=['POST'])
-def chat():
+async def chat():
     """Handles chat messages from the UI."""
     user_message = request.json.get('message')
     if not user_message:
@@ -44,14 +41,19 @@ def chat():
     # Because our chatbot methods are async, we need to run them in an event loop.
     # Flask doesn't support async routes by default in a simple way,
     # so asyncio.run() is a straightforward solution for this use case.
+    
     try:
-        response_text = asyncio.run(chatbot_instance.handle_message(user_message))
+        await chatbot_instance.connect_to_server(".\src\mcp_server.py")
+        response_text = await chatbot_instance.process_query(user_message)
         return jsonify({'response': response_text})
     except Exception as e:
+        traceback.print_exc()  # Print the traceback to the console for debugging
+        # Log the error to a file or monitoring system in production
         print(f"Error during chat handling: {e}")
+        
         return jsonify({'response': f'An internal error occurred: {e}'}), 500
 
 if __name__ == '__main__':
     # Note: For production, use a proper WSGI server like Gunicorn or Waitress
-    app.run(debug=True, port=5000)
+    app.run(debug=True, port=5000, threaded=False)
     
