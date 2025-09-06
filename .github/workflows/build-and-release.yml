@@ -12,7 +12,8 @@ on:
 # A workflow run is made up of one or more jobs
 jobs:
   build:
-    # The type of virtual machine to run the job on
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
