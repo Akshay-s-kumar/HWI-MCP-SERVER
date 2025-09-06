@@ -46,7 +46,7 @@ jobs:
       - name: Build application with PyInstaller
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          pyinstaller src/app.py --onefile --name FileSystemAssistant --add-data "src/ui:ui"
+          pyinstaller src/app.py --onefile --name FileSystemAssistant --add-data "ui:ui"
 
       # --- Step 6: RELEASE ---
       # This step creates the GitHub Release and uploads the .exe file.
