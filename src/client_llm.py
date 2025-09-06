@@ -30,7 +30,6 @@ class MCPClient:
         self.exit_stack = AsyncExitStack()
         self.available_tools = []
         self.conversation_history = []
-        self.complete_logs = []
 
     async def connect_to_server(self, server_script_path: str):
         """Connect to the MCP server script (.py) via stdio."""
@@ -95,6 +94,9 @@ SEARCH & DISCOVERY:
 - search_files: Find files by name patterns. Use for "find", "search", "look for" requests
 - find_latest_file: Find most recent file matching a pattern  
 - list_directory: Show contents of folders
+- find_files_with_content: Search for files containing specific text inside their contents. Use for requests like "find all files containing 'database connection'".
+- find_files_by_date: Find files by creation or modification date. Use for requests like "show me all Python files modified in the last 7 days".
+
 
 FILE OPERATIONS:
 - read_file: Read text file contents. Only use when user asks to "read", "show", "display" content
@@ -103,6 +105,8 @@ FILE OPERATIONS:
 - append_file: Add content to existing files
 - delete_path: Delete files/folders (requires confirmation)
 - move_file: Move, rename, or relocate files
+- compress_files: Compress files or folders into a zip archive. Use for requests like "compress all my downloads from last month".
+- extract_zip: Extract contents of a zip archive. Use for requests like "extract the backup.zip file".
 
 METADATA & INFO:
 - get_metadata: Get detailed file information
@@ -122,7 +126,6 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
         """Process a user query using LLM and available tools."""
         # Add user query to conversation history
         self.conversation_history.append({"role": "user", "content": query})
-        
         # Keep conversation history manageable (last 10 exchanges)
         if len(self.conversation_history) > 20:
             self.conversation_history = self.conversation_history[-20:]
@@ -148,7 +151,6 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
         try:
             while turn < max_turns:
                 turn += 1
-                
                 # Call LLM
                 api_response = self.openai_client.chat.completions.create(
                     model="llama3-8b-8192",  # Using larger model for better reasoning
@@ -159,7 +161,6 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
                 )
 
                 assistant_msg = api_response.choices[0].message
-                
                 # Handle tool calls
                 if assistant_msg.tool_calls:
                     messages.append({
@@ -169,7 +170,6 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
                     })
                     
                     tool_results = []
-                    
                     for tool_call in assistant_msg.tool_calls:
                         tool_name = tool_call.function.name
                         try:
@@ -184,7 +184,6 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
                             continue
                         
                         print(f"🔧 Executing: {tool_name}({tool_args})")
-                        self.complete_logs.append(tool.name)
                         try:
                             # Execute tool
                             result = await self.session.call_tool(tool_name, tool_args)
@@ -262,6 +261,7 @@ Current tools available: {', '.join(tool_descriptions.keys())}"""
 
 NATURAL LANGUAGE EXAMPLES:
 • "Find my resume in downloads"
+• "Search for files with 'report' in the name"
 • "Show me the latest file with 'project' in the name"
 • "Read the contents of config.txt"
 • "Create a new Python file called script.py"
@@ -294,10 +294,7 @@ TIPS:
     def _change_model(self, model_name: str) -> str:
         """Change the AI model (if supported)."""
         supported_models = [
-            "llama3-70b-8192",
-            "llama3-8b-8192", 
-            "mixtral-8x7b-32768",
-            "gemma-7b-it"
+            "llama3-8b-8192"
         ]
         
         if model_name in supported_models:

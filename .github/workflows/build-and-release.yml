@@ -1,0 +1,63 @@
+# A simple name for your workflow
+name: Build and Release Application
+
+# Controls when the action will run.
+# It runs on pushes to the "main" branch and on pull requests to "main".
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# A workflow run is made up of one or more jobs
+jobs:
+  build:
+    # The type of virtual machine to run the job on
+    runs-on: ubuntu-latest
+
+    steps:
+      # --- Step 1: CHECKOUT ---
+      # This step downloads your repository into the virtual machine
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # --- Step 2: SETUP ---
+      # This step sets up the Python programming language
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      # --- Step 3: INSTALL ---
+      # This step installs your project's libraries from your requirements file
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # --- Step 4: TEST ---
+      # This step runs your automated tests to check for bugs
+      - name: Run tests with pytest
+        run: pytest
+
+      # --- Step 5: BUILD ---
+      # This step builds the .exe file, but ONLY after a successful push to the main branch.
+      # It does NOT run for pull requests.
+      - name: Build application with PyInstaller
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          pyinstaller src/app.py --onefile --name FileSystemAssistant --add-data "src/ui:ui"
+
+      # --- Step 6: RELEASE ---
+      # This step creates the GitHub Release and uploads the .exe file.
+      # It also ONLY runs after a successful push to the main branch.
+      - name: Create GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          # This creates a unique version number for each release, like v1.0.1, v1.0.2 etc.
+          tag_name: v1.0.${{ github.run_number }}
+          name: Release v1.0.${{ github.run_number }}
+          files: dist/FileSystemAssistant
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

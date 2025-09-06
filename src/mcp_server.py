@@ -101,10 +101,7 @@ def resolve_path(file_path: str) -> Path:
     aliases = {
         "desktop": Path.home() / "Desktop",
         "downloads": Path.home() / "Downloads", 
-        "documents": Path.home() / "Documents",
-        "pictures": Path.home() / "Pictures",
-        "videos": Path.home() / "Videos",
-        "music": Path.home() / "Music"
+        "documents": Path.home() / "Documents"
     }
 
     parts = Path(file_path).parts
@@ -158,10 +155,7 @@ def search_files(query: str, search_path: str = "all", use_index: bool = True):
     default_dirs = {
         "desktop": Path.home() / "Desktop",
         "downloads": Path.home() / "Downloads",
-        "documents": Path.home() / "Documents",
-        "pictures": Path.home() / "Pictures",
-        "videos": Path.home() / "Videos",
-        "music": Path.home() / "Music"
+        "documents": Path.home() / "Documents"
     }
 
     if search_path.lower() == "all":
@@ -319,6 +313,92 @@ def read_file(file_path: str, max_chars: int = 5000):
     except Exception as e:
         return {"error": f"Failed to read file: {str(e)}"}
 
+#find files with specific contents
+@mcp.tool()
+def find_files_with_content(directory: str, search_text: str):
+    """Find files containing specific text (case-insensitive, returns lowercase matches)."""
+    dir_path = resolve_path(directory)
+    if not dir_path.exists() or not dir_path.is_dir():
+        return {"error": "Invalid directory."}
+
+    search_text = search_text.lower()
+    matching_files = []
+    for path in dir_path.rglob("*"):
+        if path.is_file():
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    content = f.read().lower()
+                    if search_text in content:
+                        matching_files.append(str(path.resolve()).lower())
+            except Exception as e:
+                continue
+
+    return {"matching_files": matching_files}
+
+#find files by date
+@mcp.tool()
+def find_files_by_date(directory: str, days: int = 7):
+    """Find files modified in the last 'days' days."""
+    dir_path = resolve_path(directory)
+    if not dir_path.exists() or not dir_path.is_dir():
+        return {"error": "Invalid directory."}
+
+    cutoff_time = datetime.now().timestamp() - (days * 24 * 60 * 60)
+    matching_files = []
+
+    for path in dir_path.rglob("*"):
+        if path.is_file():
+            try:
+                stat = path.stat()
+                if stat.st_mtime >= cutoff_time:
+                    matching_files.append({
+                        "path": str(path.resolve()),
+                        "name": path.name,
+                        "modified": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                        "size": stat.st_size
+                    })
+            except Exception as e:
+                continue
+
+    return {"matching_files": matching_files, "count": len(matching_files)}
+
+
+#compresion and decompresion zip files
+import zipfile
+
+@mcp.tool()
+def compress_files(paths: list, output_zip: str):
+    """Compress files or folders into a zip archive."""
+    output_path = resolve_path(output_zip)
+    try:
+        with zipfile.ZipFile(output_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for p in paths:
+                path = resolve_path(p)
+                if path.is_file():
+                    zipf.write(path, arcname=path.name)
+                elif path.is_dir():
+                    for file in path.rglob("*"):
+                        if file.is_file():
+                            zipf.write(file, arcname=str(file.relative_to(path.parent)))
+        return {"status": "success", "zip_path": str(output_path.resolve())}
+    except Exception as e:
+        return {"error": f"Failed to compress files: {str(e)}"}
+
+@mcp.tool()
+def extract_zip(zip_path: str, extract_to: str = None):
+    """Extract contents of a zip archive."""
+    zip_path = resolve_path(zip_path)
+    if not zip_path.exists() or not zip_path.is_file():
+        return {"error": "Zip file not found."}
+    extract_dir = resolve_path(extract_to) if extract_to else zip_path.parent
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zipf:
+            zipf.extractall(extract_dir)
+        return {"status": "extracted", "extracted_to": str(extract_dir.resolve())}
+    except Exception as e:
+        return {"error": f"Failed to extract zip: {str(e)}"}
+    
+    
 # ✍️ Create new file with templates
 @mcp.tool()
 def create_file(file_path: str, content: str = "", template: str = None):
